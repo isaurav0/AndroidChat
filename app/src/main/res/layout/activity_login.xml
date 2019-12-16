@@ -1,9 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Login">
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="50dp"
+        android:layout_marginTop="100dp">
+
+
+    <EditText
+        android:id="@+id/edit_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:textSize="30sp">
+    </EditText>
+
+<!--    <TextView-->
+<!--        android:id="@+id/password"-->
+<!--        android:layout_below="@+id/edit_email"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:text="Password"-->
+<!--        android:textSize="30sp"-->
+<!--        >-->
+<!--    </TextView>-->
+
+    <EditText
+        android:id="@+id/edit_password"
+        android:layout_below="@id/edit_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:textSize="30sp"
+        android:inputType="textPassword" >
+    </EditText>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edit_password"
+            android:layout_alignRight="@+id/edit_password"
+            android:text="Login" />
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
