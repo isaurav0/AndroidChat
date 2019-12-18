@@ -1,7 +1,9 @@
 package com.example.chat;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,11 +25,13 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 
 import javax.net.ssl.SSLContext;
 
+import static android.media.tv.TvContract.Programs.Genres.encode;
 import static java.lang.Thread.sleep;
 
 
@@ -38,7 +42,10 @@ public class Login extends AppCompatActivity {
     String username, password, response="sauravpathak";
     URL url;
     HttpURLConnection connection = null;
+    DataOutputStream dataOut;
 
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,30 +76,35 @@ public class Login extends AppCompatActivity {
                     @Override
                     public void run() {
                         try {
-                            URL url = new URL("http://192.168.0.2:3000/login");
+                            URL url = new URL("http://192.168.10.13:3000/login");
+//                            String urlstr = url.toString();
                             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                            urlConnection.setRequestMethod("GET");
+                            urlConnection.setRequestMethod("POST");
                             urlConnection.setUseCaches(true);
-
-
+                            urlConnection.setDoOutput(true);
+                            urlConnection.setDoInput(true);
+                            urlConnection.setAllowUserInteraction(false);
+                            urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                            dataOut = new DataOutputStream(urlConnection.getOutputStream());
+                            dataOut.writeUTF("&username="+username+"&password="+password);
                             try {
                                 int code = urlConnection.getResponseCode();
-                                BufferedReader breader;
-                                if(code >=200 && code<=299) {
-                                    breader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                                }
-                                else{
-                                    breader = new BufferedReader(new InputStreamReader(urlConnection.getErrorStream()));
-                                }
-
-                                StringBuffer stringBuffer = new StringBuffer();
-                                String line;
-                                while ((line = breader.readLine()) != null)
-                                {
-                                    stringBuffer.append(line);
-                                }
-                                response = stringBuffer.toString();
-                                Log.d("muji", stringBuffer.toString());
+//                                BufferedReader breader;
+//                                if(code >=200 && code<=299) {
+//                                    breader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+//                                }
+//                                else{
+//                                    breader = new BufferedReader(new InputStreamReader(urlConnection.getErrorStream()));
+//                                }
+//
+//                                StringBuffer stringBuffer = new StringBuffer();
+//                                String line;
+//                                while ((line = breader.readLine()) != null)
+//                                {
+//                                    stringBuffer.append(line);
+//                                }
+//                                response = stringBuffer.toString();
+                                Log.d("muji", String.valueOf(code));
                             } finally {
                                 urlConnection.disconnect();
                             }
@@ -108,8 +120,8 @@ public class Login extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
             }
         });
     }
-
 }
