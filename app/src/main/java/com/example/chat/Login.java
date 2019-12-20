@@ -3,6 +3,8 @@ package com.example.chat;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,6 +45,7 @@ public class Login extends AppCompatActivity {
     URL url;
     HttpURLConnection connection = null;
     DataOutputStream dataOut;
+    int code;
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -65,9 +68,10 @@ public class Login extends AppCompatActivity {
         btn_login= (Button) findViewById(R.id.btn_login);
 
         btn_login.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ShowToast")
             @Override
-            public void onClick(View v) {
-                input_username = (EditText) findViewById(R.id.edit_email);
+            public void onClick(final View v) {
+                input_username = (EditText) findViewById(R.id.edit_username);
                 input_password = (EditText) findViewById(R.id.edit_password);
                 username = input_username.getText().toString();
                 password = input_password.getText().toString();
@@ -88,23 +92,20 @@ public class Login extends AppCompatActivity {
                             dataOut = new DataOutputStream(urlConnection.getOutputStream());
                             dataOut.writeUTF("&username="+username+"&password="+password);
                             try {
-                                int code = urlConnection.getResponseCode();
-//                                BufferedReader breader;
-//                                if(code >=200 && code<=299) {
-//                                    breader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-//                                }
-//                                else{
-//                                    breader = new BufferedReader(new InputStreamReader(urlConnection.getErrorStream()));
-//                                }
-//
-//                                StringBuffer stringBuffer = new StringBuffer();
-//                                String line;
-//                                while ((line = breader.readLine()) != null)
-//                                {
-//                                    stringBuffer.append(line);
-//                                }
-//                                response = stringBuffer.toString();
-                                Log.d("muji", String.valueOf(code));
+                                code = urlConnection.getResponseCode();
+                                Log.d("mujicode", String.valueOf(code));
+                                if(code<200 && code>299){
+                                    BufferedReader breader;
+                                    breader = new BufferedReader(new InputStreamReader(urlConnection.getErrorStream()));
+                                    StringBuffer stringBuffer = new StringBuffer();
+                                    String line;
+                                    while ((line = breader.readLine()) != null)
+                                    {
+                                        stringBuffer.append(line);
+                                    }
+                                    response = stringBuffer.toString();
+                                }
+
                             } finally {
                                 urlConnection.disconnect();
                             }
@@ -115,9 +116,22 @@ public class Login extends AppCompatActivity {
                 });
                 t.start();
                 try {
-                    JSONObject jsonResponse = new JSONObject(response);
-                    Toast.makeText(getApplicationContext(), jsonResponse.getString("msg"), Toast.LENGTH_LONG).show();
-                } catch (JSONException e) {
+                    t.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                try {
+//                    JSONObject jsonResponse = new JSONObject(response);
+                    if(code >=200 && code<=299) {
+                        Intent to_home = new Intent(v.getContext(), Home.class);
+                        startActivity(to_home);
+                    }
+                    else{
+//                        Toast.makeText(getApplicationContext(), jsonResponse.getString("msg"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
+                        Log.d("lamo",response);
+                    }
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 

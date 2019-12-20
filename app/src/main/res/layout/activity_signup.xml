@@ -11,7 +11,6 @@
         android:padding="50dp"
         android:layout_marginTop="100dp">
 
-
         <EditText
             android:id="@+id/edit_name"
             android:layout_width="match_parent"
@@ -22,8 +21,19 @@
 
 
         <EditText
-            android:id="@+id/edit_email"
+            android:id="@+id/edit_username"
             android:layout_below="@+id/edit_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Username"
+            android:textSize="30sp">
+        </EditText>
+
+
+
+        <EditText
+            android:id="@+id/edit_email"
+            android:layout_below="@+id/edit_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email"

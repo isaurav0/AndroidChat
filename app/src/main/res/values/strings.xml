@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">chat</string>
+    <string name="title_activity_home">Home</string>
+    <string name="welcome_to_the_app">Welcome to the app</string>
 </resources>
